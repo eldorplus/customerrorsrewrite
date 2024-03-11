@@ -50,11 +50,13 @@ func (c *CustomErrorsRewrite) ServeHTTP(rw http.ResponseWriter, req *http.Reques
 			log.Println("MatchPattern:" + c.config.MatchPattern)
 			log.Println("ReplaceRule:" + c.config.ReplaceRule)
 			newPath := regexp.MustCompile(c.config.MatchPattern).ReplaceAllString(req.URL.Path, c.config.ReplaceRule)
+			log.Println("New path:" + newPath)
 			req.URL.Path = newPath
 			newHost := strings.TrimPrefix(c.config.TargetService, "https://")
 			newHost = strings.TrimPrefix(newHost, "http://")
 			req.URL.Host = newHost
-
+			log.Println("New Host:" + newHost)
+			log.Println("Target Service:" + c.config.TargetService)
 			targetURL := c.config.TargetService + newPath // use newPath
 			log.Println("targetURL:" + targetURL)
 
